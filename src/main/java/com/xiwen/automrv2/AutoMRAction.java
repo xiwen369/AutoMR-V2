@@ -13,6 +13,8 @@ import java.util.List;
 
 public class AutoMRAction extends AnAction {
 
+
+
     @Override
     public void actionPerformed(AnActionEvent e) {
         // 显示自定义操作页面
@@ -34,7 +36,7 @@ public class AutoMRAction extends AnAction {
                 message.append("目标分支: ").append(String.join(", ", targetBranches)).append("\n");
                 message.append("MR标题: ").append(mrTitle);
 
-                Messages.showInfoMessage(message.toString(), "合并请求提交成功!");
+                Messages.showInfoMessage(message.toString(), "自动提交合并请求任务已完成!");
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }

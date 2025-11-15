@@ -9,11 +9,10 @@ import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.intellij.openapi.ui.Messages.showErrorDialog;
+
 @Component
 public class GitLabService {
-    
-    private static final String GITLAB_API_URL = "https://git.yyrd.com/api/v4";
-    private static final String PRIVATE_TOKEN = "glpat-ZgmFCs12Vd1mp6nUVty3"; // 建议从配置文件或环境变量读取
 
     private final Converter converter = new Converter();
 
@@ -21,10 +20,15 @@ public class GitLabService {
      * 获取当前用户有权访问的所有项目
      */
     public List<ProjectDto> getAccessibleProjects() throws Exception{
+
+        MyConfigService myConfigService = new MyConfigService();
+        String gitlabToken = myConfigService.readConfigByKey("GITLAB_TOKEN");
+        String gitlabApiUrl = myConfigService.readConfigByKey("GITLAB_API_URL");
+
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(GITLAB_API_URL + "/projects?per_page=100"))
-                .header("PRIVATE-TOKEN", PRIVATE_TOKEN)
+                .uri(URI.create(gitlabApiUrl + "/projects?per_page=100"))
+                .header("PRIVATE-TOKEN", gitlabToken)
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -42,12 +46,16 @@ public class GitLabService {
      */
     public void createMergeRequest(String projectName, String sourceBranch, List<String> targetBranchList, String title) throws Exception {
 
+        MyConfigService myConfigService = new MyConfigService();
+        String gitlabToken = myConfigService.readConfigByKey("GITLAB_TOKEN");
+        String gitlabApiUrl = myConfigService.readConfigByKey("GITLAB_API_URL");
+
         Integer projectId = getProjectId(projectName);
 
         HttpClient client = HttpClient.newHttpClient();
 
         // 构造创建合并请求的URL
-        String url = GITLAB_API_URL + "/projects/" + projectId + "/merge_requests";
+        String url = gitlabApiUrl + "/projects/" + projectId + "/merge_requests";
 
         for (String targetBranch : targetBranchList) {
             // 构造请求体
@@ -61,7 +69,7 @@ public class GitLabService {
             // 创建HTTP请求
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
-                    .header("PRIVATE-TOKEN", PRIVATE_TOKEN)
+                    .header("PRIVATE-TOKEN", gitlabToken)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
@@ -70,7 +78,14 @@ public class GitLabService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             // 处理响应
-            if (response.statusCode() != 201) {
+            if(response.statusCode() == 409) {
+                showErrorDialog("合并请求已存在",
+                   "已经有其他人提交了相同的合并请求!" +
+                   sourceBranch + " -> " + targetBranch);
+            }
+
+
+            if (response.statusCode() != 201 && response.statusCode() != 409) {
                 throw new RuntimeException("Failed to create merge request: " + response.statusCode() + " - " + response.body());
             }
 
