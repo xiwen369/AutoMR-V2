@@ -1,0 +1,149 @@
+package com.xiwen.automrv2;
+
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.Messages;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class AutoMRAction extends AnAction {
+
+    @Override
+    public void actionPerformed(AnActionEvent e) {
+        // 显示自定义操作页面
+        AutoMRDialog dialog = new AutoMRDialog();
+        if (dialog.showAndGet()) {
+            // 获取用户输入的参数
+            String projectName = dialog.getProjectName();
+            String sourceBranch = dialog.getSourceBranch();
+            List<String> targetBranches = dialog.getTargetBranches();
+            String mrTitle = dialog.getMrTitle();
+
+            GitLabService gitLabService = new GitLabService();
+
+            try {
+                gitLabService.createMergeRequest(projectName, sourceBranch, targetBranches, mrTitle);
+                StringBuilder message = new StringBuilder();
+                message.append("项目: ").append(projectName).append("\n");
+                message.append("源分支: ").append(sourceBranch).append("\n");
+                message.append("目标分支: ").append(String.join(", ", targetBranches)).append("\n");
+                message.append("MR标题: ").append(mrTitle);
+
+                Messages.showInfoMessage(message.toString(), "合并请求提交成功!");
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    private static class AutoMRDialog extends DialogWrapper {
+        private JComboBox<String> projectNameCombo;
+        private JTextField sourceBranchField;
+        private JPanel targetBranchPanel; // 用于放置多个复选框
+        private JTextField mrTitleField;
+
+        // 配置的项目名称选项
+        private static final String[] PROJECT_OPTIONS = {
+                "pm-project-middle-end",
+                "pm-projectme-front",
+        };
+
+        // 配置的目标分支选项
+        private static final String[] TARGET_BRANCH_OPTIONS = {
+                "develop",
+                "daily",
+                "release",
+        };
+
+        public AutoMRDialog() {
+            super(true);
+            init();
+            setTitle("自动创建合并请求");
+        }
+
+        @Nullable
+        @Override
+        protected JComponent createCenterPanel() {
+            JPanel panel = new JPanel(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.anchor = GridBagConstraints.WEST;
+
+            // 第一行 - 项目名称（下拉框）
+            gbc.gridx = 0; gbc.gridy = 0;
+            panel.add(new JLabel("项目名称:"), gbc);
+            gbc.gridx = 1;
+            projectNameCombo = new JComboBox<>(PROJECT_OPTIONS);
+            projectNameCombo.setSelectedItem("pm-project-middle-end");
+            panel.add(projectNameCombo, gbc);
+
+            // 第二行 - 源分支
+            gbc.gridx = 0; gbc.gridy = 1;
+            panel.add(new JLabel("源分支:"), gbc);
+            gbc.gridx = 1;
+            sourceBranchField = new JTextField("feature/20251115", 20);
+            panel.add(sourceBranchField, gbc);
+
+            // 第三行 - 目标分支（多选框面板）
+            gbc.gridx = 0; gbc.gridy = 2;
+            panel.add(new JLabel("目标分支:"), gbc);
+            gbc.gridx = 1;
+            targetBranchPanel = createTargetBranchCheckBoxes();
+            panel.add(targetBranchPanel, gbc);
+
+            // 第四行 - MR标题
+            gbc.gridx = 0; gbc.gridy = 3;
+            panel.add(new JLabel("MR标题:"), gbc);
+            gbc.gridx = 1;
+            mrTitleField = new JTextField("AutoMR", 20);
+            panel.add(mrTitleField, gbc);
+
+            return panel;
+        }
+
+        // 创建目标分支复选框面板
+        private JPanel createTargetBranchCheckBoxes() {
+            JPanel checkBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            for (String branch : TARGET_BRANCH_OPTIONS) {
+                JCheckBox checkBox = new JCheckBox(branch);
+                if ("develop".equals(branch)) {
+                    checkBox.setSelected(true); // 默认选中develop分支
+                }
+                checkBoxPanel.add(checkBox);
+            }
+            return checkBoxPanel;
+        }
+
+        public String getProjectName() {
+            return (String) projectNameCombo.getSelectedItem();
+        }
+
+        public String getSourceBranch() {
+            return sourceBranchField.getText();
+        }
+
+        // 获取选中的目标分支列表
+        public List<String> getTargetBranches() {
+            List<String> selectedBranches = new ArrayList<>();
+            Component[] components = targetBranchPanel.getComponents();
+            for (Component component : components) {
+                if (component instanceof JCheckBox) {
+                    JCheckBox checkBox = (JCheckBox) component;
+                    if (checkBox.isSelected()) {
+                        selectedBranches.add(checkBox.getText());
+                    }
+                }
+            }
+            return selectedBranches;
+        }
+
+        public String getMrTitle() {
+            return mrTitleField.getText();
+        }
+    }
+}
