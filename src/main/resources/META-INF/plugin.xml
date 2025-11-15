@@ -16,6 +16,13 @@
     <description><![CDATA[
     This is a convenient plugin for automatically submitting pull requests.<br>
     这是一款方便的自动提交合并代码请求的插件.
+    配置文件内容如下:
+    {
+	    "GITLAB_API_URL" : "https://git.yyrd.com/api/v4",   // GitLab API URL
+	    "GITLAB_TOKEN" : "XXXXX",   // GitLab API Token
+	    "PROJECT_OPTIONS" : ["pm-project-middle-end","pm-projectme-front"],    // 项目名称
+	    "TARGET_BRANCH_OPTIONS" : ["develop","daily","release"]    // 目标分支
+    }
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.

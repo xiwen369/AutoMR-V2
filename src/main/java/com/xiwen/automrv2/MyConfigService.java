@@ -19,10 +19,17 @@ public class MyConfigService {
 
 
     Path getConfigPath() {
-        Path configPath = Paths.get(System.getProperty("user.home"), "IdeaProjects/MyProject/service", "AutoMR-config.json");
 
-        System.out.println("路径为:" + configPath);
-        return configPath;
+        String configPathProperty = System.getProperty("AUTOMR_CONFIG_PATH");
+
+        if (configPathProperty == null || configPathProperty.isEmpty()) {
+            throw new RuntimeException("读取配置文件路径异常!");
+        }
+
+        System.out.println("配置文件路径: " + configPathProperty);
+
+        return Paths.get(configPathProperty);
+
     }
 
 

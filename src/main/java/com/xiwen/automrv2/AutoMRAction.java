@@ -8,12 +8,14 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 自动合并插件入口
+ */
 public class AutoMRAction extends AnAction {
-
-
 
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -48,6 +50,8 @@ public class AutoMRAction extends AnAction {
         private JTextField sourceBranchField;
         private JPanel targetBranchPanel; // 用于放置多个复选框
         private JTextField mrTitleField;
+        private JTextField configFilePathField; // Replace configButton with textField
+        private JButton browseConfigButton; // A
 
         // 配置的项目名称选项
         private static final String[] PROJECT_OPTIONS = {
@@ -66,6 +70,11 @@ public class AutoMRAction extends AnAction {
             super(true);
             init();
             setTitle("自动创建合并请求");
+
+            String savedConfigPath = System.getProperty("AUTOMR_CONFIG_PATH");
+            if (savedConfigPath != null && !savedConfigPath.isEmpty()) {
+                configFilePathField.setText(savedConfigPath);
+            }
         }
 
         @Nullable
@@ -73,11 +82,25 @@ public class AutoMRAction extends AnAction {
         protected JComponent createCenterPanel() {
             JPanel panel = new JPanel(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.insets = new Insets(10, 10, 10, 10);
             gbc.anchor = GridBagConstraints.WEST;
 
+            gbc.gridx = 0;
+            gbc.gridy = 4;
+            panel.add(new JLabel("配置文件:"), gbc);
+            gbc.gridx = 1;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            JPanel configPanel = new JPanel(new BorderLayout());
+            configFilePathField = new JTextField(20);
+            browseConfigButton = new JButton("浏览");
+            browseConfigButton.addActionListener(e -> browseConfigFile());
+            configPanel.add(configFilePathField, BorderLayout.CENTER);
+            configPanel.add(browseConfigButton, BorderLayout.EAST);
+            panel.add(configPanel, gbc);
+
             // 第一行 - 项目名称（下拉框）
-            gbc.gridx = 0; gbc.gridy = 0;
+            gbc.gridx = 0;
+            gbc.gridy = 0;
             panel.add(new JLabel("项目名称:"), gbc);
             gbc.gridx = 1;
             projectNameCombo = new JComboBox<>(PROJECT_OPTIONS);
@@ -85,27 +108,61 @@ public class AutoMRAction extends AnAction {
             panel.add(projectNameCombo, gbc);
 
             // 第二行 - 源分支
-            gbc.gridx = 0; gbc.gridy = 1;
+            gbc.gridx = 0;
+            gbc.gridy = 1;
             panel.add(new JLabel("源分支:"), gbc);
             gbc.gridx = 1;
             sourceBranchField = new JTextField("feature/20251115", 20);
             panel.add(sourceBranchField, gbc);
 
             // 第三行 - 目标分支（多选框面板）
-            gbc.gridx = 0; gbc.gridy = 2;
+            gbc.gridx = 0;
+            gbc.gridy = 2;
             panel.add(new JLabel("目标分支:"), gbc);
             gbc.gridx = 1;
             targetBranchPanel = createTargetBranchCheckBoxes();
             panel.add(targetBranchPanel, gbc);
 
             // 第四行 - MR标题
-            gbc.gridx = 0; gbc.gridy = 3;
+            gbc.gridx = 0;
+            gbc.gridy = 3;
             panel.add(new JLabel("MR标题:"), gbc);
             gbc.gridx = 1;
             mrTitleField = new JTextField("AutoMR", 20);
             panel.add(mrTitleField, gbc);
 
             return panel;
+        }
+
+        private void browseConfigFile() {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("选择配置文件");
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+                @Override
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().toLowerCase().endsWith(".json") ||
+                           f.getName().toLowerCase().endsWith(".properties") ||
+                           f.getName().toLowerCase().endsWith(".yaml") ||
+                           f.getName().toLowerCase().endsWith(".yml");
+                }
+
+                @Override
+                public String getDescription() {
+                    return "Configuration Files (*.json, *.properties, *.yaml, *.yml)";
+                }
+            });
+
+            int result = fileChooser.showOpenDialog(this.getWindow());
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String configPath = selectedFile.getAbsolutePath();
+                configFilePathField.setText(configPath);
+                System.setProperty("AUTOMR_CONFIG_PATH", configPath);
+            }
         }
 
         // 创建目标分支复选框面板
