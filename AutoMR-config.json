@@ -1,0 +1,6 @@
+{
+  "GITLAB_API_URL" : "https://git.yyrd.com/api/v4",
+  "GITLAB_TOKEN" : "XXXXX",
+  "PROJECT_OPTIONS" : ["pm-project-middle-end","pm-projectme-front"],
+  "TARGET_BRANCH_OPTIONS" : ["develop","daily","release"]
+}
