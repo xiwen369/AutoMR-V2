@@ -21,6 +21,7 @@
 	    "GITLAB_API_URL" : "https://git.yyrd.com/api/v4",   // GitLab API URL
 	    "GITLAB_TOKEN" : "XXXXX",   // GitLab API Token
 	    "PROJECT_OPTIONS" : ["pm-project-middle-end","pm-projectme-front"],    // 项目名称
+	     "SOURCE_BRANCH" : "feature/20251115",
 	    "TARGET_BRANCH_OPTIONS" : ["develop","daily","release"]    // 目标分支
     }
   ]]></description>

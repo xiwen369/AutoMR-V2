@@ -59,6 +59,9 @@ public class AutoMRAction extends AnAction {
                 "pm-projectme-front",
         };
 
+        // 配置的源分支
+        private static final String SOURCE_BRANCH = "feature/20251115";
+
         // 配置的目标分支选项
         private static final String[] TARGET_BRANCH_OPTIONS = {
                 "develop",
@@ -112,7 +115,7 @@ public class AutoMRAction extends AnAction {
             gbc.gridy = 1;
             panel.add(new JLabel("源分支:"), gbc);
             gbc.gridx = 1;
-            sourceBranchField = new JTextField("feature/20251115", 20);
+            sourceBranchField = new JTextField(SOURCE_BRANCH, 20);
             panel.add(sourceBranchField, gbc);
 
             // 第三行 - 目标分支（多选框面板）
