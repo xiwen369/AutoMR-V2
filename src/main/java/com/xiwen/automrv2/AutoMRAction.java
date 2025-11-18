@@ -19,12 +19,16 @@ public class AutoMRAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+
+        MyConfigService myConfigService = new MyConfigService();
+
         // 显示自定义操作页面
         AutoMRDialog dialog = new AutoMRDialog();
         if (dialog.showAndGet()) {
             // 获取用户输入的参数
             String projectName = dialog.getProjectName();
             String sourceBranch = dialog.getSourceBranch();
+
             List<String> targetBranches = dialog.getTargetBranches();
             String mrTitle = dialog.getMrTitle();
 
@@ -37,6 +41,9 @@ public class AutoMRAction extends AnAction {
                 message.append("源分支: ").append(sourceBranch).append("\n");
                 message.append("目标分支: ").append(String.join(", ", targetBranches)).append("\n");
                 message.append("MR标题: ").append(mrTitle);
+
+                //把用户自定义的源分支保存到配置文件中
+                myConfigService.writeConfig("SOURCE_BRANCH", sourceBranch);
 
                 Messages.showInfoMessage(message.toString(), "自动提交合并请求任务已完成!");
             } catch (Exception ex) {
@@ -110,12 +117,15 @@ public class AutoMRAction extends AnAction {
             projectNameCombo.setSelectedItem("pm-project-middle-end");
             panel.add(projectNameCombo, gbc);
 
+            MyConfigService myConfigService = new MyConfigService();
+            String sourceBranch = myConfigService.readConfigByKey("SOURCE_BRANCH");
+
             // 第二行 - 源分支
             gbc.gridx = 0;
             gbc.gridy = 1;
             panel.add(new JLabel("源分支:"), gbc);
             gbc.gridx = 1;
-            sourceBranchField = new JTextField(SOURCE_BRANCH, 20);
+            sourceBranchField = new JTextField(sourceBranch, 20);
             panel.add(sourceBranchField, gbc);
 
             // 第三行 - 目标分支（多选框面板）
@@ -148,9 +158,9 @@ public class AutoMRAction extends AnAction {
                 @Override
                 public boolean accept(File f) {
                     return f.isDirectory() || f.getName().toLowerCase().endsWith(".json") ||
-                           f.getName().toLowerCase().endsWith(".properties") ||
-                           f.getName().toLowerCase().endsWith(".yaml") ||
-                           f.getName().toLowerCase().endsWith(".yml");
+                            f.getName().toLowerCase().endsWith(".properties") ||
+                            f.getName().toLowerCase().endsWith(".yaml") ||
+                            f.getName().toLowerCase().endsWith(".yml");
                 }
 
                 @Override

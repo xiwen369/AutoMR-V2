@@ -23,6 +23,10 @@ public class MyConfig {
 
         System.out.println("路径为:" + configPath);
 
+        MyConfigService myConfigService = new MyConfigService();
+
+        myConfigService.writeConfig("key", "value");
+
         try {
             String configString = java.nio.file.Files.readString(configPath);
 

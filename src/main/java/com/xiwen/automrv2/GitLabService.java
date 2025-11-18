@@ -90,7 +90,7 @@ public class GitLabService {
             }
 
             //等待3秒
-            Thread.sleep(2000);
+            Thread.sleep(100);
 
         }
 
