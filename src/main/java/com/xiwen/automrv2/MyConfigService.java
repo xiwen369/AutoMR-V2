@@ -94,7 +94,7 @@ public class MyConfigService {
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(configString);
-            JsonNode projectOptionsNode = jsonNode.get("PROJECT_OPTIONS");
+            JsonNode projectOptionsNode = jsonNode.get(key);
 
             if (projectOptionsNode != null && projectOptionsNode.isArray()) {
 

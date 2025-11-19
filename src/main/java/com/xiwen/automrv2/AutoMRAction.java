@@ -2,6 +2,7 @@ package com.xiwen.automrv2;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import org.jetbrains.annotations.Nullable;
@@ -66,8 +67,6 @@ public class AutoMRAction extends AnAction {
                 "pm-projectme-front",
         };
 
-        // 配置的源分支
-        private static final String SOURCE_BRANCH = "feature/20251115";
 
         // 配置的目标分支选项
         private static final String[] TARGET_BRANCH_OPTIONS = {
@@ -108,17 +107,18 @@ public class AutoMRAction extends AnAction {
             configPanel.add(browseConfigButton, BorderLayout.EAST);
             panel.add(configPanel, gbc);
 
+            MyConfigService myConfigService = new MyConfigService();
+            String sourceBranch = myConfigService.readConfigByKey("SOURCE_BRANCH");
+            List<String> projectOptions = myConfigService.readConfigListByKey("PROJECT_OPTIONS");
+
             // 第一行 - 项目名称（下拉框）
             gbc.gridx = 0;
             gbc.gridy = 0;
             panel.add(new JLabel("项目名称:"), gbc);
             gbc.gridx = 1;
-            projectNameCombo = new JComboBox<>(PROJECT_OPTIONS);
+            projectNameCombo = new ComboBox<>(projectOptions.toArray(new String[0]));
             projectNameCombo.setSelectedItem("pm-project-middle-end");
             panel.add(projectNameCombo, gbc);
-
-            MyConfigService myConfigService = new MyConfigService();
-            String sourceBranch = myConfigService.readConfigByKey("SOURCE_BRANCH");
 
             // 第二行 - 源分支
             gbc.gridx = 0;
@@ -181,7 +181,11 @@ public class AutoMRAction extends AnAction {
         // 创建目标分支复选框面板
         private JPanel createTargetBranchCheckBoxes() {
             JPanel checkBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            for (String branch : TARGET_BRANCH_OPTIONS) {
+
+            MyConfigService myConfigService = new MyConfigService();
+            List<String> targetBranchOptions = myConfigService.readConfigListByKey("TARGET_BRANCH_OPTIONS");
+
+            for (String branch : targetBranchOptions) {
                 JCheckBox checkBox = new JCheckBox(branch);
                 if ("develop".equals(branch)) {
                     checkBox.setSelected(true); // 默认选中develop分支
