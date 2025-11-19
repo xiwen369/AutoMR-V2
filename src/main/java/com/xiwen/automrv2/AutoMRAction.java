@@ -61,20 +61,6 @@ public class AutoMRAction extends AnAction {
         private JTextField configFilePathField; // Replace configButton with textField
         private JButton browseConfigButton; // A
 
-        // 配置的项目名称选项
-        private static final String[] PROJECT_OPTIONS = {
-                "pm-project-middle-end",
-                "pm-projectme-front",
-        };
-
-
-        // 配置的目标分支选项
-        private static final String[] TARGET_BRANCH_OPTIONS = {
-                "develop",
-                "daily",
-                "release",
-        };
-
         public AutoMRDialog() {
             super(true);
             init();
