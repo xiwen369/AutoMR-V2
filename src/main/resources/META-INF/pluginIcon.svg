@@ -8,7 +8,7 @@
    version="1.1"
    id="svg1"
    inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
-   sodipodi:docname="AutoMR.svg"
+   sodipodi:docname="pluginIcon.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -36,6 +36,14 @@
   <defs
      id="defs1">
     <linearGradient
+       id="swatch6"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop6" />
+    </linearGradient>
+    <linearGradient
        id="swatch449"
        inkscape:swatch="solid">
       <stop
@@ -46,7 +54,7 @@
     <linearGradient
        id="swatch11">
       <stop
-         style="stop-color:#3be036;stop-opacity:0.4790419;"
+         style="stop-color:#009c00;stop-opacity:0.93413174;"
          offset="0"
          id="stop11" />
     </linearGradient>
@@ -71,7 +79,17 @@
        x2="395.90625"
        y2="187.18211"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(0,1.9969722)" />
+       gradientTransform="matrix(0.68546743,-9.4626952e-4,0,0.52003792,88.368462,89.424993)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#swatch6"
+       id="linearGradient7"
+       gradientUnits="userSpaceOnUse"
+       x1="149.53166"
+       y1="187.18211"
+       x2="396.40584"
+       y2="187.18211"
+       gradientTransform="translate(0,-0.3461671)" />
   </defs>
   <g
      inkscape:label="图层 1"
@@ -80,17 +98,17 @@
      style="opacity:1">
     <text
        xml:space="preserve"
-       transform="matrix(0.30411795,0.00382907,0,0.66941239,-17.112385,-61.082203)"
+       transform="matrix(0.44366507,0.00736305,0,1.2872376,-56.318385,-175.50728)"
        id="text1"
-       style="font-size:64px;text-align:center;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1);fill:url(#linearGradient454);fill-rule:nonzero;stroke-width:0.999188;stroke-dasharray:none;paint-order:stroke fill markers"
+       style="font-size:64px;text-align:center;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1);fill:url(#linearGradient454);fill-rule:nonzero;stroke:url(#linearGradient7);stroke-width:0.999188;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
        x="245.875"
        y="0"
-       inkscape:transform-center-y="-0.4707423"
-       inkscape:transform-center-x="-0.44559931"><tspan
+       inkscape:transform-center-y="-0.90522"
+       inkscape:transform-center-x="-0.6500679"><tspan
          x="149.21875"
          y="209.96336"
-         id="tspan3"><tspan
+         id="tspan4"><tspan
            style="display:inline"
-           id="tspan2">AutoMR</tspan></tspan></text>
+           id="tspan1">AutoMR</tspan></tspan></text>
   </g>
 </svg>
