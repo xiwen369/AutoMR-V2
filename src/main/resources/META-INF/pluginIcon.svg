@@ -1,12 +1,96 @@
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M32.0845 7.94025V4H24.0203V7.9896H16.029V4H7.91553V7.94025H4V36H16.0044V32.0045C16.0058 30.9457 16.4274 29.9308 17.1766 29.1826C17.9258 28.4345 18.9412 28.0143 20 28.0143C21.0588 28.0143 22.0743 28.4345 22.8234 29.1826C23.5726 29.9308 23.9942 30.9457 23.9956 32.0045V36H36V7.94025H32.0845Z"
-          fill="url(#paint0_linear)"/>
-    <defs>
-        <linearGradient id="paint0_linear" x1="2.94192" y1="4.89955" x2="37.7772" y2="39.7345"
-                        gradientUnits="userSpaceOnUse">
-            <stop offset="0.15937" stop-color="#3BEA62"/>
-            <stop offset="0.5404" stop-color="#3C99CC"/>
-            <stop offset="0.93739" stop-color="#6B57FF"/>
-        </linearGradient>
-    </defs>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="128mm"
+   height="128mm"
+   viewBox="0 0 128 128"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   sodipodi:docname="AutoMR.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.59376962"
+     inkscape:cx="241.67622"
+     inkscape:cy="241.67622"
+     inkscape:window-width="1440"
+     inkscape:window-height="796"
+     inkscape:window-x="631"
+     inkscape:window-y="1465"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch449"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop450" />
+    </linearGradient>
+    <linearGradient
+       id="swatch11">
+      <stop
+         style="stop-color:#3be036;stop-opacity:0.4790419;"
+         offset="0"
+         id="stop11" />
+    </linearGradient>
+    <rect
+       x="25.262323"
+       y="220.62429"
+       width="95.996828"
+       height="136.41654"
+       id="rect2" />
+    <rect
+       x="126.31162"
+       y="151.57394"
+       width="292.25149"
+       height="99.728034"
+       id="rect1" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#swatch11"
+       id="linearGradient454"
+       x1="150.03125"
+       y1="187.18211"
+       x2="395.90625"
+       y2="187.18211"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,1.9969722)" />
+  </defs>
+  <g
+     inkscape:label="图层 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="opacity:1">
+    <text
+       xml:space="preserve"
+       transform="matrix(0.30411795,0.00382907,0,0.66941239,-17.112385,-61.082203)"
+       id="text1"
+       style="font-size:64px;text-align:center;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1);fill:url(#linearGradient454);fill-rule:nonzero;stroke-width:0.999188;stroke-dasharray:none;paint-order:stroke fill markers"
+       x="245.875"
+       y="0"
+       inkscape:transform-center-y="-0.4707423"
+       inkscape:transform-center-x="-0.44559931"><tspan
+         x="149.21875"
+         y="209.96336"
+         id="tspan3"><tspan
+           style="display:inline"
+           id="tspan2">AutoMR</tspan></tspan></text>
+  </g>
 </svg>
