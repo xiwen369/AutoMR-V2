@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.xiwen"
-version = "1.3.1-SNAPSHOT"
+version = "1.0-RELEASE"
 
 repositories {
     mavenCentral()
