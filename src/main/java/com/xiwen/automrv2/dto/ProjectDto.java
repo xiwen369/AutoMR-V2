@@ -1,4 +1,4 @@
-package com.xiwen.automrv2;
+package com.xiwen.automrv2.dto;
 
 /**
  * XXX

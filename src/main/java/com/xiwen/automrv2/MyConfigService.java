@@ -2,6 +2,8 @@ package com.xiwen.automrv2;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -131,8 +133,27 @@ public class MyConfigService {
                 jsonNode = mapper.createObjectNode();
             }
 
-            // 更新或添加键值对
-            ((com.fasterxml.jackson.databind.node.ObjectNode) jsonNode).put(key, value);
+            ObjectNode objectNode = (ObjectNode) jsonNode;
+
+            // 检查该键是否存在且为数组
+            JsonNode existingNode = objectNode.get(key);
+            if (existingNode != null && existingNode.isArray()) {
+                // 如果是数组，追加值（避免重复）
+                ArrayNode arrayNode = (ArrayNode) existingNode;
+                boolean exists = false;
+                for (JsonNode node : arrayNode) {
+                    if (node.asText().equals(value)) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    arrayNode.add(value);
+                }
+            } else {
+                // 如果不是数组或不存在，直接设置为字符串值
+                objectNode.put(key, value);
+            }
 
             // 将更新后的JSON写回文件
             String updatedConfigContent = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);

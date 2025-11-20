@@ -3,6 +3,8 @@ package com.xiwen.automrv2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xiwen.automrv2.dto.BranchDto;
+import com.xiwen.automrv2.dto.ProjectDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -33,6 +35,24 @@ public class Converter {
         });
 
         return projectDtoList;
+    }
+
+
+    List<BranchDto> convertToBranchDto(String listMapString) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<Map<String, Object>> listMap = mapper.readValue(listMapString, new TypeReference<>() {});
+
+        List<BranchDto> branchDtoList = new ArrayList<>();
+
+        listMap.forEach(map -> {
+            BranchDto branchDto = new BranchDto();
+            branchDto.setName(map.get("name").toString());
+            branchDtoList.add(branchDto);
+        });
+
+        return branchDtoList;
+
     }
 
 }

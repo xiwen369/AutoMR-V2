@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -45,6 +46,7 @@ public class AutoMRAction extends AnAction {
 
                 //把用户自定义的源分支保存到配置文件中
                 myConfigService.writeConfig("SOURCE_BRANCH", sourceBranch);
+                myConfigService.writeConfig("STARRED_SOURCE_BRANCHES", sourceBranch);
 
                 Messages.showInfoMessage(message.toString(), "自动提交合并请求任务已完成!");
             } catch (Exception ex) {
@@ -55,11 +57,11 @@ public class AutoMRAction extends AnAction {
 
     private static class AutoMRDialog extends DialogWrapper {
         private JComboBox<String> projectNameCombo;
-        private JTextField sourceBranchField;
         private JPanel targetBranchPanel; // 用于放置多个复选框
         private JTextField mrTitleField;
         private JTextField configFilePathField; // Replace configButton with textField
         private JButton browseConfigButton; // A
+        private JComboBox<String> sourceBranchCombo;
 
         public AutoMRDialog() {
             super(true);
@@ -95,6 +97,7 @@ public class AutoMRAction extends AnAction {
 
             MyConfigService myConfigService = new MyConfigService();
             String sourceBranch = myConfigService.readConfigByKey("SOURCE_BRANCH");
+            List<String> starredSourceBranches = myConfigService.readConfigListByKey("STARRED_SOURCE_BRANCHES");
             List<String> projectOptions = myConfigService.readConfigListByKey("PROJECT_OPTIONS");
 
             // 第一行 - 项目名称（下拉框）
@@ -111,8 +114,12 @@ public class AutoMRAction extends AnAction {
             gbc.gridy = 1;
             panel.add(new JLabel("源分支:"), gbc);
             gbc.gridx = 1;
-            sourceBranchField = new JTextField(sourceBranch, 20);
-            panel.add(sourceBranchField, gbc);
+            JComboBox<String> sourceBranchCombo = new ComboBox<>(starredSourceBranches.toArray(new String[0]));
+            this.sourceBranchCombo = sourceBranchCombo; // 保存引用
+            sourceBranchCombo.setEditable(true);
+            AutoCompleteDecorator.decorate(sourceBranchCombo);
+            sourceBranchCombo.setSelectedItem(sourceBranch); // 添加这行代码设置默认值
+            panel.add(sourceBranchCombo, gbc);
 
             // 第三行 - 目标分支（多选框面板）
             gbc.gridx = 0;
@@ -186,8 +193,7 @@ public class AutoMRAction extends AnAction {
         }
 
         public String getSourceBranch() {
-            return sourceBranchField.getText();
-        }
+            return (String) sourceBranchCombo.getSelectedItem();        }
 
         // 获取选中的目标分支列表
         public List<String> getTargetBranches() {

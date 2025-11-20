@@ -1,7 +1,10 @@
 package com.xiwen.automrv2;
 
+import com.xiwen.automrv2.dto.BranchDto;
+import com.xiwen.automrv2.dto.ProjectDto;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,7 +17,7 @@ import static com.intellij.openapi.ui.Messages.showErrorDialog;
 @Component
 public class GitLabService {
 
-    private final Converter converter = new Converter();
+    private static final Converter converter = new Converter();
 
     /**
      * 获取当前用户有权访问的所有项目
@@ -96,6 +99,9 @@ public class GitLabService {
 
     }
 
+    /**
+     * 获取项目ID
+     */
     private static Integer getProjectId(String projectName) throws Exception {
         GitLabService gitLabService = new GitLabService();
 
@@ -107,6 +113,45 @@ public class GitLabService {
         projectDtoList.forEach(projectDto -> nameIdMap.put(projectDto.getName(), projectDto.getId()));
         Integer projectId = nameIdMap.get(projectName);
         return projectId;
+    }
+
+    /**
+     * 获取项目分支
+     */
+    public static List<String> getProjectBranches(String projectName) throws Exception {
+
+        Integer projectId = getProjectId(projectName);
+
+        // 获取配置信息
+        MyConfigService myConfigService = new MyConfigService();
+        String gitlabToken = myConfigService.readConfigByKey("GITLAB_TOKEN");
+        String gitlabApiUrl = myConfigService.readConfigByKey("GITLAB_API_URL");
+
+        // 构建请求URL
+        String url = gitlabApiUrl + "/projects/" + projectId + "/repository/branches?per_page=9999";
+
+        // 创建HTTP客户端和请求
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("PRIVATE-TOKEN", gitlabToken)
+                .build();
+
+        // 发送请求
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // 处理响应
+        if (response.statusCode() == 200) {
+            // 使用converter转换分支信息
+            List<BranchDto> branchDtoList = converter.convertToBranchDto(response.body());
+            // 提取分支名称列表
+            return branchDtoList.stream()
+                    .map(BranchDto::getName)
+                    .collect(java.util.stream.Collectors.toList());
+        } else {
+            throw new RuntimeException("Failed to fetch branches: " + response.statusCode() + " - " + response.body());
+        }
+
     }
 
 

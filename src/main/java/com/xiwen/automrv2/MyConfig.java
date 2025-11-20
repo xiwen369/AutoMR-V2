@@ -1,12 +1,7 @@
 package com.xiwen.automrv2;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,34 +12,15 @@ import java.util.List;
  */
 public class MyConfig {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         Path configPath = Paths.get(System.getProperty("user.home"), "IdeaProjects/MyProject/service", "AutoMR-config.json");
 
         System.out.println("路径为:" + configPath);
 
-        MyConfigService myConfigService = new MyConfigService();
+        List<String> projectBranches = GitLabService.getProjectBranches("pm-project-middle-end");
 
-        myConfigService.writeConfig("key", "value");
-
-        try {
-            String configString = java.nio.file.Files.readString(configPath);
-
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(configString);
-            JsonNode projectOptionsNode = jsonNode.get("PROJECT_OPTIONS");
-
-            if (projectOptionsNode != null && projectOptionsNode.isArray()) {
-                List<String> projectOptions = new ArrayList<>();
-                for (JsonNode node : projectOptionsNode) {
-                    projectOptions.add(node.asText());
-                }
-                System.out.println("配置文件: " + projectOptions);
-            }
-
-        } catch (IOException e) {
-            System.out.println("读取配置文件异常!");
-        }
+        System.out.println("项目分支:"+projectBranches);
 
 
     }
