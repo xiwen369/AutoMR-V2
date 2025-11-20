@@ -14,9 +14,9 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    This is a convenient plugin for automatically submitting pull requests.<br>
-    这是一款方便的自动提交合并代码请求的插件.
-    配置文件内容如下:
+    This is a convenient plugin for automatically submitting pull requests.<br/>
+    这是一款方便的自动提交合并代码请求的插件。<br/>
+    配置文件内容如下:<br/>
     {
 	    "GITLAB_API_URL" : "https://git.yyrd.com/api/v4",   // GitLab API URL
 	    "GITLAB_TOKEN" : "XXXXX",   // GitLab API Token
